@@ -35,7 +35,9 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     async function loadProducts(): Promise<void> {
-      // TODO
+      const response = await api.get('/products');
+
+      setProducts(response.data);
     }
 
     loadProducts();
@@ -43,6 +45,7 @@ const Dashboard: React.FC = () => {
 
   function handleAddToCart(item: Product): void {
     // TODO
+    addToCart(item);
   }
 
   return (
@@ -50,20 +53,20 @@ const Dashboard: React.FC = () => {
       <ProductContainer>
         <ProductList
           data={products}
-          keyExtractor={item => item.id}
+          keyExtractor={product => product.id}
           ListFooterComponent={<View />}
           ListFooterComponentStyle={{
             height: 80,
           }}
-          renderItem={({ item }) => (
+          renderItem={({ item: product }) => (
             <Product>
-              <ProductImage source={{ uri: item.image_url }} />
-              <ProductTitle>{item.title}</ProductTitle>
+              <ProductImage source={{ uri: product.image_url }} />
+              <ProductTitle>{product.title}</ProductTitle>
               <PriceContainer>
-                <ProductPrice>{formatValue(item.price)}</ProductPrice>
+                <ProductPrice>{formatValue(product.price)}</ProductPrice>
                 <ProductButton
-                  testID={`add-to-cart-${item.id}`}
-                  onPress={() => handleAddToCart(item)}
+                  testID={`add-to-cart-${product.id}`}
+                  onPress={() => handleAddToCart(product)}
                 >
                   <FeatherIcon size={20} name="plus" color="#C4C4C4" />
                 </ProductButton>
